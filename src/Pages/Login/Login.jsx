@@ -3,6 +3,9 @@ import img from "../../assets/images/login/login.svg";
 const Login = () => {
   const handleLogin = (event) => {
     event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.email.password;
   };
   return (
     <div className="hero bg-base-200 min-h-screen">

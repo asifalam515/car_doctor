@@ -1,9 +1,35 @@
 import { Link } from "react-router-dom";
 import img from "../../assets/images/login/login.svg";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
+  const { user, createUser } = useContext(AuthContext);
+
   const handleSignUp = (event) => {
     event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    createUser(email, password)
+      .then((result) => {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "User Has Been Created",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${error.message}`,
+        });
+      });
   };
   return (
     <div>
@@ -18,6 +44,18 @@ const SignUp = () => {
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
+                </label>
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="name"
+                  className="input input-bordered"
+                  required
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
                 </label>
                 <input
                   name="email"
@@ -49,9 +87,9 @@ const SignUp = () => {
               </div>
             </form>
             <p className="my-4 text-center">
-              New To Car Doctors??{" "}
-              <Link className="text-orange-600 font-bold" to="/signup">
-                Sign Up
+              Already Have an Account?{" "}
+              <Link className="text-orange-600 font-bold" to="/login">
+                Login
               </Link>{" "}
             </p>
           </div>
