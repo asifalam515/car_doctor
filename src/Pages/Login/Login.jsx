@@ -1,11 +1,35 @@
 import { Link } from "react-router-dom";
 import img from "../../assets/images/login/login.svg";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 const Login = () => {
+  const { logInUser } = useContext(AuthContext);
   const handleLogin = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
-    const password = form.email.password;
+    const password = form.password.value;
+    logInUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logged In",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          position: "top",
+          icon: "error",
+          title: `Error Occurs ${error.message}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
   };
   return (
     <div className="hero bg-base-200 min-h-screen">

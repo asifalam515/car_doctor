@@ -1,6 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
+import { useContext } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
+import Swal from "sweetalert2";
 const Nabar = () => {
+  const { logOut, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    logOut().then(() => {
+      Swal.fire({
+        position: "top",
+        icon: "success",
+        title: "Logged Out",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+    navigate("/");
+  };
   const navItems = (
     <>
       <li>
@@ -9,9 +26,21 @@ const Nabar = () => {
       <li>
         <Link to="/about">About</Link>
       </li>
-      <li>
-        <Link></Link>
-      </li>
+      {user?.email ? (
+        <>
+          <li>
+            {" "}
+            <Link to="/bookings">My Bookings</Link>
+          </li>
+          <li>
+            <button onClick={handleLogOut}>LogOut</button>
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </>
   );
   return (
