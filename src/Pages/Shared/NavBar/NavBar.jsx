@@ -35,6 +35,9 @@ const Nabar = () => {
           <li>
             <button onClick={handleLogOut}>LogOut</button>
           </li>
+          <li>
+            <button onClick={handleLogOut}>Github Sign In</button>
+          </li>
         </>
       ) : (
         <li>
