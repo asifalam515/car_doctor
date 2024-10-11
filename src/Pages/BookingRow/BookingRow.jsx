@@ -1,34 +1,18 @@
 import Swal from "sweetalert2";
 
-const BookingRow = ({ booking }) => {
-  const { service_id, _id, service, price, img, email, date, customerName } =
-    booking;
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      // Everything  will be done from here
-      console.log(id);
-      fetch(`http://localhost:5000/bookings/${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data));
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-      }
-    });
-  };
+const BookingRow = ({ booking, handleDelete, handleBookingConfirm }) => {
+  const {
+    service_id,
+    _id,
+    service,
+    price,
+    img,
+    email,
+    date,
+    customerName,
+    status,
+  } = booking;
+
   return (
     <>
       <tr>
@@ -69,8 +53,19 @@ const BookingRow = ({ booking }) => {
         </td>
         <td> {service} </td>
         <td> {price} </td>
+        <td> {date} </td>
         <th>
-          <button className="btn btn-ghost btn-xs"> {date} </button>
+          {status === "confirm" ? (
+            <span className="font-bold  text-primary">Confirmed</span>
+          ) : (
+            <button
+              onClick={() => handleBookingConfirm(_id)}
+              className="btn btn-ghost btn-xs"
+            >
+              {" "}
+              Confirm Now{" "}
+            </button>
+          )}
         </th>
       </tr>
     </>
