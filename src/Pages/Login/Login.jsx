@@ -1,9 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import img from "../../assets/images/login/login.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
+
 const Login = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { logInUser } = useContext(AuthContext);
   const handleLogin = (event) => {
     event.preventDefault();
@@ -12,7 +16,21 @@ const Login = () => {
     const password = form.password.value;
     logInUser(email, password)
       .then((result) => {
-        const user = result.user;
+        const loggedInUser = result.user;
+        console.log(loggedInUser);
+        const user = { email };
+        // navigate(location?.state ? location?.state : "/");
+        // get access token
+
+        axios
+          .post("http://localhost:5000/jwt", user, { withCredentials: true })
+          .then((res) => {
+            console.log(res.data);
+
+            if (res.data.success) {
+              navigate(location?.state ? location?.state : "/");
+            }
+          });
         Swal.fire({
           position: "top-end",
           icon: "success",
